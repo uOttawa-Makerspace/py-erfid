@@ -10,9 +10,9 @@ Super simple RFID sign in/sign out system
    * Set `enable_uart=1` at the bottom of /boot/config.txt (add that line if it is not there).
    * Reboot (`sudo reboot`).
 
-2. Install pip if not already done:
+2. Install pip & ntp if not already done:
    ```
-   sudo apt install python-pip
+   sudo apt install python-pip ntp
    ```
 
 3. Install requirements:
