@@ -1,0 +1,5 @@
+gpiozero>=1.4.1,<2.0.0
+netifaces>=0.10.9,<1.0.0
+nfcpy>=0.13.5,<1.0.0
+pyserial>=3.4,<4.0
+requests>=2.21.0,<3.0.0
