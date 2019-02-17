@@ -26,6 +26,6 @@ Super simple RFID sign in/sign out system
    ```
    sudo bash install-service.sh
    ```
-5. Run `read-only-fs.sh` and follow the instructions to make the system read-only and avoid issues when unplugging the Pi while it is running. See [this Adafruit article](https://learn.adafruit.com/read-only-raspberry-pi/) for more information.
+5. Run `read-only-fs.sh` and follow the instructions to make the system read-only and avoid issues when unplugging the Pi while it is running. We recommend using the boot-time read/write jumper set to GPIO 21. See [this Adafruit article](https://learn.adafruit.com/read-only-raspberry-pi/) for more information.
 
 6. Done!
