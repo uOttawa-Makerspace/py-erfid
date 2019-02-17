@@ -1,0 +1,13 @@
+[Unit]
+Description=RFID
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/usr/bin/python py-erfid.py
+WorkingDirectory=/home/pi/py-erfid
+
+[Install]
+WantedBy=sysinit.target
