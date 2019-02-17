@@ -10,9 +10,14 @@ Super simple RFID sign in/sign out system
    * Set `enable_uart=1` at the bottom of /boot/config.txt (add that line if it is not there).
    * Reboot (`sudo reboot`).
 
-2. Install pip & ntp if not already done:
+2. Install git, ntp, and pip if not already done:
    ```
-   sudo apt install python-pip ntp
+   sudo apt install git ntp python-pip
+   ```
+   
+3. Clone this repo in `/home/pi`:
+   ```
+   git clone https://github.com/nicoco007/py-erfid
    ```
 
 3. Install requirements:
