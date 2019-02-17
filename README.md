@@ -4,7 +4,7 @@ Super simple RFID sign in/sign out system
 ## Installation
 1. Disable serial communication:
    * Launch raspi-config `sudo raspi-config`
-   * Select 6. Interfacing Options, then P6. Serial.
+   * Select `6. Interfacing Options`, then `P6. Serial.`
    * Select "No" for both "Would you like a login shell to be accessible over Serial?" and "Would you like the serial port hardware to be enabled?".
    * If you are prompted to reboot the Pi after saving, select "No".
    * Set `enable_uart=1` at the bottom of /boot/config.txt (add that line if it is not there).
