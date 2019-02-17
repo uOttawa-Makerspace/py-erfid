@@ -5,114 +5,122 @@ from gpiozero import LED
 import netifaces
 from threading import Thread
 import sys
+import traceback
 
-green = LED(23)
-red = LED(24)
-yellow = LED(25)
+class PyErfid:
+  def __init__(self):
+    self.green = LED(23)
+    self.red = LED(24)
+    self.yellow = LED(25)
 
-green.on()
-yellow.on()
-red.on()
+    self.green.on()
+    self.yellow.on()
+    self.red.on()
 
-clf = nfc.ContactlessFrontend()
-mac = netifaces.ifaddresses("wlan0")[netifaces.AF_LINK][0]["addr"]
-print "MAC address: " + mac
+    self.clf = nfc.ContactlessFrontend()
+    self.mac = netifaces.ifaddresses("wlan0")[netifaces.AF_LINK][0]["addr"]
+    print "MAC address: " + self.mac
 
-try:
-  clf.open('tty:S0:pn532')
-except:
-  print(sys.exc_info()[0])
-  yellow.on()
-  red.on()
-
-print "Connected to RFID board"
-
-thread = None
-working = False
-
-green.off()
-yellow.off()
-red.off()
-
-def start_blink():
-  global thread
-  thread = Thread(target=blink)
-  thread.start()
-
-def stop_blink():
-  global thread
-  global working
-  working = False
-
-  if thread:
-    thread.join()
-
-def blink():
-  global working
-  working = True
-
-  while working:
-    green.on()
-    yellow.on()
-    red.on()
-    time.sleep(0.05)
-    green.off()
-    yellow.off()
-    red.off()
-    time.sleep(0.05)
-
-def success():
-  for i in range(3):
-    green.on()
-    time.sleep(0.25)
-    green.off()
-    time.sleep(0.25)
-
-def error():
-  for i in range(3):
-    red.on()
-    time.sleep(0.25)
-    red.off()
-    time.sleep(0.25)
-
-def warning():
-  for i in range(3):
-    yellow.on()
-    time.sleep(0.25)
-    yellow.off()
-    time.sleep(0.25)
-
-while True:
-  tag = clf.connect(rdwr={'on-connect': lambda tag: False})
-
-  if tag:
     try:
-      id = tag.identifier.encode('HEX').upper()
-      data = {"rfid": id, "mac_address": mac + "\n"} # newline for backwards compat with ruby version
-      start_blink()
-      res = requests.post("https://makerepo.com/rfid/card_number", json=data, headers={"Content-Type": "application/json"})
-      stop_blink()
-
-      if not res or res.status_code != 200:
-        error()
-        continue
-
-      obj = res.json()
-
-      if obj["success"] == "RFID sign in":
-        success()
-        continue
-      elif obj["success"] == "RFID sign out":
-        warning()
-        continue
-
-      # fallback to error
-      error()
+      self.clf.open('tty:S0:pn532')
     except:
-      print(sys.exc_info()[0])
-      stop_blink()
-      error()
+      traceback.print_exc()
+      self.yellow.on()
+      self.red.on()
 
-  time.sleep(0.5)
+    print "Connected to RFID board"
 
-clf.close()
+    self.thread = None
+    self.working = False
+
+    self.green.off()
+    self.yellow.off()
+    self.red.off()
+
+  def start_blink(self):
+    self.thread = Thread(target=self.run_blink)
+    self.thread.start()
+
+  def stop_blink(self):
+    self.working = False
+
+    if self.thread:
+      self.thread.join()
+      self.thread = None
+
+  def run_blink(self):
+    self.working = True
+
+    while self.working:
+      self.green.on()
+      self.yellow.on()
+      self.red.on()
+
+      time.sleep(0.05)
+
+      self.green.off()
+      self.yellow.off()
+      self.red.off()
+
+      time.sleep(0.05)
+
+  def success(self):
+    for i in range(3):
+      self.green.on()
+      time.sleep(0.25)
+      self.green.off()
+      time.sleep(0.25)
+
+  def error(self):
+    for i in range(3):
+      self.red.on()
+      time.sleep(0.25)
+      self.red.off()
+      time.sleep(0.25)
+
+  def warning(self):
+    for i in range(3):
+      self.yellow.on()
+      time.sleep(0.25)
+      self.yellow.off()
+      time.sleep(0.25)
+
+  def run(self):
+    while True:
+      tag = self.clf.connect(rdwr={'on-connect': lambda t: False})
+
+      if tag:
+        try:
+          id = tag.identifier.encode('HEX').upper()
+          data = {"rfid": id, "mac_address": self.mac + "\n"} # newline for backwards compat with ruby version
+          self.start_blink()
+          res = requests.post("https://makerepo.com/rfid/card_number", json=data, headers={"Content-Type": "application/json"})
+          self.stop_blink()
+
+          if not res or res.status_code != 200:
+            self.error()
+            continue
+
+          obj = res.json()
+
+          if obj["success"] == "RFID sign in":
+            self.success()
+            continue
+          elif obj["success"] == "RFID sign out":
+            self.warning()
+            continue
+
+          # fallback to error
+          self.error()
+        except:
+          traceback.print_exc()
+          self.stop_blink()
+          self.error()
+
+      time.sleep(0.5)
+
+    clf.close()
+
+if __name__ == "__main__":
+  erfid = PyErfid()
+  erfid.run()
