@@ -7,7 +7,7 @@ Super simple RFID sign in/sign out system
    * Select 6. Interfacing Options, then P6. Serial.
    * Select "No" for both "Would you like a login shell to be accessible over Serial?" and "Would you like the serial port hardware to be enabled?".
    * If you are prompted to reboot the Pi after saving, select "No".
-   * Set enable_uart=1 at the bottom of /boot/config.txt (add that line if it is not there).
+   * Set `enable_uart=1` at the bottom of /boot/config.txt (add that line if it is not there).
    * Reboot (`sudo reboot`).
 
 2. Install pip if not already done:
