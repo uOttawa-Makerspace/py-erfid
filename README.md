@@ -1,6 +1,7 @@
 # py-erfid
+Super simple RFID sign in/sign out system
 
-# Installation
+## Installation
 Assumptions:
 * Python 2.6+ (not 3) and pip are already installed
 
@@ -13,3 +14,5 @@ Install service
 ```
 $ sudo bash install-service.sh
 ```
+
+Done!
