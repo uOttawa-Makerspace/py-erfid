@@ -89,7 +89,14 @@ class PyErfid:
 
   def run(self):
     while True:
-      tag = self.clf.connect(rdwr={'on-connect': lambda t: False})
+      try:
+        tag = self.clf.connect(rdwr={'on-connect': lambda t: False})
+      except:
+        self.red.on()
+        self.yellow.on()
+        time.sleep(1)
+        self.red.off()
+        self.yellow.off()
 
       if tag:
         try:
