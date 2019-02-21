@@ -6,6 +6,7 @@ import netifaces
 from threading import Thread
 import sys
 import traceback
+from signal import pause
 
 class PyErfid:
   def __init__(self):
@@ -25,8 +26,9 @@ class PyErfid:
       self.clf.open('tty:S0:pn532')
     except:
       traceback.print_exc()
-      self.yellow.on()
-      self.red.on()
+      self.green.off()
+      pause()
+      exit()
 
     print "Connected to RFID board"
 
