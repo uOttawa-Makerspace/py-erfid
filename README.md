@@ -1,14 +1,13 @@
 # py-erfid
-Super simple RFID sign in/sign out system
+Super simple RFID sign in/sign out system.
 
 ## Installation
 1. Disable serial communication:
-   * Launch raspi-config `sudo raspi-config`
-   * Select `6. Interfacing Options`, then `P6. Serial.`
-   * Select "No" for both "Would you like a login shell to be accessible over Serial?" and "Would you like the serial port hardware to be enabled?".
-   * If you are prompted to reboot the Pi after saving, select "No".
-   * Set `enable_uart=1` at the bottom of /boot/config.txt (add that line if it is not there).
-   * Reboot (`sudo reboot`).
+   * Launch raspi-config: `sudo raspi-config`
+   * Select *Interfacing Options* then *Serial*
+   * Select **No** for "Would you like a login shell to be accessible over Serial?"
+   * Select **Yes** for "Would you like the serial port hardware to be enabled?"
+   * Select **Yes** when prompted to reboot the Pi after saving.
 
 2. Install git, ntp, and pip if not already done:
    ```
@@ -31,6 +30,7 @@ Super simple RFID sign in/sign out system
    ```
    sudo bash install-service.sh
    ```
+
 5. Run `read-only-fs.sh` and follow the instructions to make the system read-only and avoid issues when unplugging the Pi while it is running. We recommend using the boot-time read/write jumper set to GPIO 21. See [this Adafruit article](https://learn.adafruit.com/read-only-raspberry-pi/) for more information.
 
 6. Done!
