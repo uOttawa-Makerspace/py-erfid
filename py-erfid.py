@@ -4,6 +4,7 @@ import requests
 from gpiozero import LED
 import netifaces
 from threading import Thread
+import signal
 import sys
 import traceback
 
@@ -25,8 +26,11 @@ class PyErfid:
       self.clf.open('tty:S0:pn532')
     except:
       traceback.print_exc()
-      self.yellow.on()
+      self.green.off()
+      self.yellow.off()
       self.red.on()
+      signal.pause()
+      return
 
     print "Connected to RFID board"
 
@@ -87,7 +91,14 @@ class PyErfid:
 
   def run(self):
     while True:
-      tag = self.clf.connect(rdwr={'on-connect': lambda t: False})
+      try:
+        tag = self.clf.connect(rdwr={'on-connect': lambda t: False})
+      except:
+        self.green.off()
+        self.yellow.off()
+        self.red.on()
+        signal.pause()
+        break
 
       if tag:
         try:
@@ -119,7 +130,7 @@ class PyErfid:
 
       time.sleep(0.5)
 
-    clf.close()
+    self.clf.close()
 
 if __name__ == "__main__":
   erfid = PyErfid()
